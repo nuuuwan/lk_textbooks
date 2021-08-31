@@ -2,8 +2,8 @@ import argparse
 import time
 
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import StaleElementReferenceException
+from selenium.webdriver.firefox.options import Options
 from utils import tsv
 from utils.cache import cache
 
