@@ -1,5 +1,5 @@
 
-name: Upload Data - Manual
+name: Upload Data - Manual (Test)
 
 on: workflow_dispatch
 
