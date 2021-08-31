@@ -1,5 +1,5 @@
 
-name: Upload Data - Manual
+name: Scrape - Manual
 
 on: workflow_dispatch
 

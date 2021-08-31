@@ -1,11 +1,11 @@
 
-name: Upload Data - Cron
+name: Scrape - Manual (Test)
 
-# on:
-#  schedule:
-#    - cron:  "0 11 * * *"
-on: workflow_dispatch
-
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        default: '5'
 
 jobs:
   upload-data:
@@ -31,7 +31,7 @@ jobs:
     - name: Run - Upload Data
       run: |
         export PYTHONPATH="$PYTHONPATH:./src"
-        python src/lk_textbooks/scrape.py --limit=10000
+        python src/lk_textbooks/scrape.py --limit=${{ github.event.inputs.limit }}
 
     - name: Checkout repo branch data
       uses: actions/checkout@v2
