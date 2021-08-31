@@ -24,3 +24,4 @@
   * Updated download
   * Updated download
   * Added download workflow
+  * Lint and pytest

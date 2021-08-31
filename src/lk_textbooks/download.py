@@ -51,7 +51,7 @@ def download():
                 dir_book = f'{dir_grade}/{book_id}'
                 os.system(f'mkdir {dir_book}')
                 for data in book_entries:
-                    data['link']
+                    link = data['link']
                     chapter_id = data['chapter_id']
                     chapter_file = f'{dir_book}/{chapter_id}.pdf'
                     os.system(f'wget "{link}" > {chapter_file}')
