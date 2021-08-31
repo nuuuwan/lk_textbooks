@@ -7,3 +7,4 @@
   * Lint
   * Initial files
   * Replaced gh_template
+  * basic scrape
