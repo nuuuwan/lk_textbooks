@@ -9,3 +9,4 @@
   * Replaced gh_template
   * basic scrape
   * basic scrape
+  * metadata pipeline complete
