@@ -18,3 +18,4 @@
   * Updated README
   * 
   * Pre-Merge
+  * Removed acc files
