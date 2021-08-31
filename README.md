@@ -31,3 +31,4 @@
   * 
   * Updated download location
   * Logging in download
+  * Fixed bugs in download

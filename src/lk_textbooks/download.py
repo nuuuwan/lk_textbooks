@@ -93,10 +93,10 @@ def download():
                             if www.exists(remote_url):
                                 log.warning(f'{remote_url} exists.')
                             else:
-                                os.system(f'wget -o {chapter_file} "{url}" ')
+                                os.system(f'wget -O {chapter_file} "{url}" ')
                                 log.info(
                                     f'\tDownloaded {chapter_file}'
-                                    + ' ({file_size_mb:.1f}MB)'
+                                    + f' ({file_size_mb:.1f}MB)'
                                 )
 
                     else:
