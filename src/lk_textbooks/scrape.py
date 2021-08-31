@@ -11,5 +11,10 @@ def scrape():
 
     driver.get(URL)
 
+
+    select_lang = driver.find_element_by_id('BookLanguage')
+    print(select_lang)
+
+
 if __name__ == '__main__':
-    scrape()    
+    scrape()
