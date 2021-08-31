@@ -2,6 +2,9 @@
 name: Upload Data - Manual (Test)
 
 on: workflow_dispatch
+  inputs:
+    limit:
+      default: 5
 
 jobs:
   upload-data:
@@ -27,7 +30,7 @@ jobs:
     - name: Run - Upload Data
       run: |
         export PYTHONPATH="$PYTHONPATH:./src"
-        python src/lk_textbooks/scrape.py --limit=5
+        python src/lk_textbooks/scrape.py --limit=${{ github.event.inputs.limit }}
 
     - name: Checkout repo branch data
       uses: actions/checkout@v2
