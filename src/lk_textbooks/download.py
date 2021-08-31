@@ -1,4 +1,5 @@
 import os
+import urllib.request
 
 from utils import www
 from utils.cache import cache
@@ -10,6 +11,13 @@ METADATA_URL = (
     'https://raw.githubusercontent.com'
     + '/nuuuwan/lk_textbooks/data/lk_textbooks.tsv'
 )
+MAX_REMOTE_FILE_SIZE_MB = 10
+
+
+@cache(CACHE_NAME, CACHE_TIMEOUT)
+def get_remote_file_size_mb(url):
+    file = urllib.request.urlopen(url)
+    return file.length / 1_000_000.0
 
 
 @cache(CACHE_NAME, CACHE_TIMEOUT)
@@ -51,11 +59,26 @@ def download():
                 dir_book = f'{dir_grade}/{book_id}'
                 os.system(f'mkdir {dir_book}')
                 for data in book_entries:
-                    link = data['link']
+                    url = data['link']
+                    file_size_mb = get_remote_file_size_mb(url)
                     chapter_id = data['chapter_id']
-                    chapter_file = f'{dir_book}/{chapter_id}.pdf'
-                    os.system(f'wget "{link}" > {chapter_file}')
-                    log.info(f'Downloaded {chapter_file}')
+
+
+                    if file_size_mb < MAX_REMOTE_FILE_SIZE_MB:
+                        chapter_file = f'{dir_book}/{chapter_id}.pdf'
+                        if not os.path.exists(chapter_file):
+                            os.system(f'wget "{url}" -o {chapter_file}')
+                            log.info(f'Downloaded {chapter_file} ({file_size_mb:.1f}MB)')
+                        else:
+                            log.warning(f'{chapter_file} exists')
+
+                    else:
+                        chapter_file = f'{dir_book}/{chapter_id}.pdf.dummy'
+                        os.system(f'echo "" > {chapter_file}')
+                        log.warning(
+                            f'Dummy Downloaded {chapter_file} '
+                            + f'({file_size_mb:.1f}MB) - Too Big'
+                        )
 
 
 if __name__ == '__main__':

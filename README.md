@@ -26,3 +26,4 @@
   * Added download workflow
   * Lint and pytest
   * Fixed download workflow dir
+  * Fixed download
