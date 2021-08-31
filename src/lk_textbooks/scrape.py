@@ -4,7 +4,7 @@ import time
 from selenium import webdriver
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.firefox.options import Options
-from utils import tsv
+from utils import tsv, dt
 from utils.cache import cache
 
 from lk_textbooks._constants import CACHE_NAME, CACHE_TIMEOUT
@@ -123,29 +123,36 @@ def scrape_all(limit):
 
             n_book_names = len(book_names)
             log.info(f'Got {n_book_names} books for {lang}/{grade}')
-            for book_name in book_names:
+            for book in book_names:
                 try:
                     chapter_links = scrape_get_chapter_links(
-                        lang, grade, book_name
+                        lang, grade, book
                     )
                 except StaleElementReferenceException:
                     chapter_links = []
 
                 n_chapter_links = len(chapter_links)
                 log.info(
-                    f'Got {n_chapter_links} chapters '
-                    + f'for {lang}/{grade}/{book_name}'
+                    f'\tGot {n_chapter_links} chapters '
+                    + f'for {lang}/{grade}/{book}'
                 )
                 for chapter_link in chapter_links:
+                    chapter = chapter_link['name']
                     data_list.append(
                         dict(
                             lang=lang,
+                            lang_id=dt.to_kebab(lang),
                             grade=grade,
-                            book_name=book_name,
-                            chapter_name=chapter_link['name'],
+                            grade_id=dt.to_kebab(grade),
+                            book=book,
+                            book_id=dt.to_kebab(book),
+                            chapter=chapter,
+                            chapter_id=dt.to_kebab(chapter),
                             link=chapter_link['url'],
                         )
                     )
+                    n_data_list = len(data_list)
+                    log.info(f'\t\t{n_data_list}) Added {chapter}')
                     if len(data_list) >= limit:
                         is_over_limit = True
                         break
