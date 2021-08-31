@@ -33,3 +33,4 @@
   * Logging in download
   * Fixed bugs in download
   * Changed downloads to docs
+  * Added summary md to download

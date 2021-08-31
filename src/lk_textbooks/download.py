@@ -1,7 +1,7 @@
 import os
 import urllib.request
 
-from utils import www
+from utils import filex, timex, www
 from utils.cache import cache
 
 from lk_textbooks._constants import CACHE_NAME, CACHE_TIMEOUT
@@ -12,6 +12,12 @@ METADATA_URL = (
     + '/nuuuwan/lk_textbooks/data/lk_textbooks.tsv'
 )
 MAX_REMOTE_FILE_SIZE_MB = 1
+DIR_DOCS = '/tmp/lk_textbooks/docs'
+REMOTE_DIR_DOCS = 'https://github.com/nuuuwan/lk_textbooks/tree/data/docs'
+
+def init():
+    os.system(f'rm -rf {DIR_DOCS}')
+    os.system(f'mkdir -p {DIR_DOCS}')
 
 
 @cache(CACHE_NAME, CACHE_TIMEOUT)
@@ -20,7 +26,6 @@ def get_remote_file_size_mb(url):
     return file.length / 1_000_000.0
 
 
-@cache(CACHE_NAME, CACHE_TIMEOUT)
 def get_metadata():
     data_list = www.read_tsv(METADATA_URL)
     n_data_list = len(data_list)
@@ -28,13 +33,8 @@ def get_metadata():
     return data_list
 
 
-def download():
+def get_metadata_map():
     metadata = get_metadata()
-    n_metadata = len(metadata)
-    dir_download = '/tmp/lk_textbooks/docs'
-    os.system(f'rm -rf {dir_download}')
-    os.system(f'mkdir -p {dir_download}')
-
     index_entries = {}
     for data in metadata:
         lang_id = data['lang_id']
@@ -49,11 +49,17 @@ def download():
             index_entries[lang_id][grade_id][book_id] = []
 
         index_entries[lang_id][grade_id][book_id].append(data)
+    return index_entries
+
+
+def download():
+    index_entries = get_metadata_map()
+
 
     i_metadata = 0
     for lang_id, lang_entries in index_entries.items():
 
-        dir_lang = os.path.join(dir_download, lang_id)
+        dir_lang = os.path.join(DIR_DOCS, lang_id)
         os.system(f'mkdir {dir_lang}')
         for grade_id, grade_entries in lang_entries.items():
 
@@ -70,7 +76,7 @@ def download():
                     chapter_id = data['chapter_id']
                     i_metadata += 1
                     log.info(
-                        f'{i_metadata}/{n_metadata}: '
+                        f'{i_metadata}: '
                         + f' {lang_id}{grade_id}{book_id}{chapter_id}'
                     )
 
@@ -84,8 +90,7 @@ def download():
                         else:
 
                             remote_url = os.path.join(
-                                'https://raw.githubusercontent.com',
-                                'nuuuwan/lk_textbooks/data/downloads',
+                                REMOTE_DIR_DOCS,
                                 f'{lang_id}/{grade_id}/{book_id}',
                                 f'{chapter_id}.pdf',
                             )
@@ -108,5 +113,39 @@ def download():
                         )
 
 
+def build_summary_md():
+    index_entries = get_metadata_map()
+    time_str = timex.format_time(timex.get_unixtime(), '%I:%m%p, %B %d, %Y')
+    md_lines = [
+        '# Textbooks',
+        '*From [Educational Publications Department]'
+        + '(http://www.edupub.gov.lk/BooksDownload.php)*',
+        '## Contents',
+        f'Upload time: **{time_str}**',
+    ]
+    for lang_id, lang_entries in index_entries.items():
+
+        dir_lang = os.path.join(REMOTE_DIR_DOCS, lang_id)
+        md_lines.append(f'* [{lang_id}]({dir_lang})')
+        for grade_id, grade_entries in lang_entries.items():
+
+            dir_grade = os.path.join(dir_lang, grade_id)
+            md_lines.append(f'  * [{grade_id}]({dir_grade})')
+            for book_id, book_entries in grade_entries.items():
+
+                dir_book = os.path.join(dir_grade, book_id)
+                md_lines.append(f'    * [{book_id}]({dir_book})')
+                for data in book_entries:
+                    chapter_id = data['chapter_id']
+                    file_chapter = os.path.join(dir_book, chapter_id)
+                    md_lines.append(f'      * [{chapter_id}]({file_chapter})')
+
+    md_file = '/tmp/lk_textbooks/docs/README.md'
+    filex.write(md_file, '\n\n'.join(md_lines))
+    log.info(f'Wrote summary to {md_file}')
+
+
 if __name__ == '__main__':
-    download()
+    init()
+    # download()
+    build_summary_md()
