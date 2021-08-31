@@ -147,5 +147,5 @@ def build_summary_md():
 
 if __name__ == '__main__':
     init()
-    # download()
+    download()
     build_summary_md()
