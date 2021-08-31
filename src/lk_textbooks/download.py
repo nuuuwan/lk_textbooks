@@ -14,6 +14,7 @@ METADATA_URL = (
 MAX_REMOTE_FILE_SIZE_MB = 1
 DIR_DOCS = '/tmp/lk_textbooks/docs'
 REMOTE_DIR_DOCS = 'https://github.com/nuuuwan/lk_textbooks/tree/data/docs'
+REMOTE_DIR_DOCS_RAW = 'https://raw.githubusercontent.com/nuuuwan/lk_textbooks/data/docs'
 
 def init():
     os.system(f'rm -rf {DIR_DOCS}')
@@ -90,7 +91,7 @@ def download():
                         else:
 
                             remote_url = os.path.join(
-                                REMOTE_DIR_DOCS,
+                                REMOTE_DIR_DOCS_RAW,
                                 f'{lang_id}/{grade_id}/{book_id}',
                                 f'{chapter_id}.pdf',
                             )

@@ -35,3 +35,4 @@
   * Changed downloads to docs
   * Added summary md to download
   * uncommented
+  * Fixed remote exists bug
