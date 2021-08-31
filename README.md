@@ -1,4 +1,4 @@
-# gh_template_py
+# lk_textbooks
 
 ## Release History
 
@@ -6,3 +6,4 @@
   * Basic changes
   * Lint
   * Initial files
+  * Replaced gh_template
