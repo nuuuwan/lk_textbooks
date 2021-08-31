@@ -25,34 +25,35 @@ def download():
 
     index_entries = {}
     for data in metadata:
-        lang = data['lang']
-        grade = data['grade']
-        book_name = data['book_name']
+        lang_id = data['lang_id']
+        grade_id = data['grade_id']
+        book_id = data['book_id']
 
-        if lang not in index_entries:
-            index_entries[lang] = {}
-        if grade not in index_entries[lang]:
-            index_entries[lang][grade] = {}
-        if book_name not in index_entries[lang][grade]:
-            index_entries[lang][grade][book_name] = []
+        if lang_id not in index_entries:
+            index_entries[lang_id] = {}
+        if grade_id not in index_entries[lang_id]:
+            index_entries[lang_id][grade_id] = {}
+        if book_id not in index_entries[lang_id][grade_id]:
+            index_entries[lang_id][grade_id][book_id] = []
 
-        index_entries[lang][grade][book_name].append(data)
+        index_entries[lang_id][grade_id][book_id].append(data)
 
 
-    for lang, lang_entries in index_entries.items():
-        dir_lang = f'{dir_download}/{lang}'
-        os.system(f'mkdir "{dir_lang}"')
-        for grade, grade_entries in lang_entries.items():
-            dir_grade = f'{dir_lang}/{grade}'
-            os.system(f'mkdir "{dir_grade}"')
-            for book, book_entries in grade_entries.items():
-                dir_book = f'{dir_grade}/{book}'
-                os.system(f'mkdir "{dir_book}"')
+    for lang_id, lang_entries in index_entries.items():
+        dir_lang = f'{dir_download}/{lang_id}'
+        os.system(f'mkdir {dir_lang}')
+        for grade_id, grade_entries in lang_entries.items():
+            dir_grade = f'{dir_lang}/{grade_id}'
+            os.system(f'mkdir {dir_grade}')
+            for book_id, book_entries in grade_entries.items():
+                dir_book = f'{dir_grade}/{book_id}'
+                os.system(f'mkdir {dir_book}')
                 for data in book_entries:
                     link = data['link']
-                    chapter_name = data['chapter_name']
-                    # os.system(f'wget "{link}" > "{chapter_name}.pdf"')
-                    os.system(f'echo "" > "{chapter_name}.pdf"')
+                    chapter_id = data['chapter_id']
+                    chapter_file = f'{dir_book}/{chapter_id}.pdf'
+                    # os.system(f'wget "{link}" > {chapter_file}')
+                    os.system(f'echo "" > {chapter_file}')
 
 
 if __name__ == '__main__':
