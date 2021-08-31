@@ -1,4 +1,4 @@
 """Constants."""
 
-CACHE_NAME = 'lk_textbooks'
+CACHE_NAME = 'lk_textbooks.v0001'
 CACHE_TIMEOUT = 3600

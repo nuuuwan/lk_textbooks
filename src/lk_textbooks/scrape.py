@@ -4,7 +4,7 @@ import time
 from selenium import webdriver
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.firefox.options import Options
-from utils import tsv, dt
+from utils import dt, tsv
 from utils.cache import cache
 
 from lk_textbooks._constants import CACHE_NAME, CACHE_TIMEOUT
@@ -125,9 +125,7 @@ def scrape_all(limit):
             log.info(f'Got {n_book_names} books for {lang}/{grade}')
             for book in book_names:
                 try:
-                    chapter_links = scrape_get_chapter_links(
-                        lang, grade, book
-                    )
+                    chapter_links = scrape_get_chapter_links(lang, grade, book)
                 except StaleElementReferenceException:
                     chapter_links = []
 
