@@ -29,3 +29,4 @@
   * Fixed download
   * removed acc
   * 
+  * Updated download location
