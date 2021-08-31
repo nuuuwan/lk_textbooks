@@ -31,7 +31,7 @@ def get_metadata():
 def download():
     metadata = get_metadata()
     n_metadata = len(metadata)
-    dir_download = '/tmp/lk_textbooks/downloads'
+    dir_download = '/tmp/lk_textbooks/docs'
     os.system(f'rm -rf {dir_download}')
     os.system(f'mkdir -p {dir_download}')
 
